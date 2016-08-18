@@ -1,0 +1,91 @@
+﻿<UserControl
+    x:Class="Wpf.Views.GroupsParserView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:Wpf.ViewModels"
+    xmlns:model="clr-namespace:VkNet.Model;assembly=VkNet"
+    mc:Ignorable="d"
+    xmlns:mvvm="http://prismlibrary.com/"
+    mvvm:ViewModelLocator.AutoWireViewModel="True"
+    d:DataContext="{d:DesignInstance viewModels:GroupsParserViewModel}"
+   >
+
+    <DockPanel
+        LastChildFill="True">
+
+        <DockPanel
+            LastChildFill="True">
+
+            <ScrollViewer
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Auto">
+                <DataGrid
+                    AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding Groups}">
+                    <DataGrid.Columns>
+                        
+                        <DataGridTextColumn
+                            Header="Название группы"
+                            Binding="{Binding Result.Name}" />
+                        <DataGridTextColumn
+                            Header="Id"
+                            Binding="{Binding Result.Id}" />
+                        <DataGridTextColumn
+                            Header="Подписчиков"
+                            Binding="{Binding Result.MembersCount}" />
+
+                        <DataGridTemplateColumn
+                            Header="Админы">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate
+                                    DataType="{x:Type model:Group}">
+                                    <ListBox
+                                        ItemsSource="{Binding Result.Contacts}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate
+                                                DataType="{x:Type model:Contact}">
+                                                <TextBlock>
+                                                <Run
+                                                        Text="{Binding UserId}" />
+                                                <Run
+                                                        Text="{Binding Email}" />
+                                                <Run
+                                                        Text="{Binding Description}" />
+                                                <Run
+                                                        Text="{Binding Phone}" />
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn
+                            Header="Анализ">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        Command="{Binding Path=DataContext.AnalizeCommand, 
+                                                RelativeSource={RelativeSource Mode=FindAncestor,      
+                                                AncestorType={x:Type DataGrid}} }"
+                                        CommandParameter="{Binding Result.Id}">
+                                        <TextBlock
+                                            Text="Анализ" />
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn
+                            Header="Статус"
+                            Binding="{Binding Message}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+
+        </DockPanel>
+
+    </DockPanel>
+</UserControl>
