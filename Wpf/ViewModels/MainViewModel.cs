@@ -11,7 +11,8 @@ using Prism.Commands;
 namespace Wpf.ViewModels
 {
     public class AgregateEvent : CompositePresentationEvent<long> { }
-    public class MainViewModel: ViewModelBase
+    public class TokenReceived : CompositePresentationEvent<string> { }
+    public class MainViewModel : Notifier
     {
         private readonly IRegionManager _RegionManager;
         private VkParser _parser;
@@ -23,8 +24,17 @@ namespace Wpf.ViewModels
             _RegionManager = regionManager;
             _parser = parser;
             _eventAggregator = eventAggregator;
-            LogIn();
+            //LogIn();
             _eventAggregator.GetEvent<AgregateEvent>().Subscribe(Analize, ThreadOption.UIThread);
+            _eventAggregator.GetEvent<TokenReceived>().Subscribe(Logged, ThreadOption.UIThread);
+
+        }
+
+        private void Logged(string token)
+        {
+            RemoveRegionHolder();
+            NotifyPropertyChanged(nameof(LoggedIn));
+            NotifyPropertyChanged(nameof(NotLoggedIn));
         }
 
         public string SearchQuery
@@ -36,7 +46,7 @@ namespace Wpf.ViewModels
                 NotifyPropertyChanged();
             }
         }
-        
+
 
         private void Search()
         {
@@ -45,8 +55,8 @@ namespace Wpf.ViewModels
             {
                 {"query", _searchQuery}
             };
-            
-            _RegionManager.RequestNavigate("ContentRegion", nameof(GroupsParserView)+query.ToString());
+
+            _RegionManager.RequestNavigate("ContentRegion", nameof(GroupsParserView) + query.ToString());
         }
         public ICommand SearchCommand => new DelegateCommand(Search);
 
@@ -54,10 +64,19 @@ namespace Wpf.ViewModels
 
         public bool NotLoggedIn => !_parser.LoggedIn();
 
+
+
+        public bool LoggedIn => _parser.LoggedIn();
+
         private void LogIn()
         {
-            _parser.Auth();
-            NotifyPropertyChanged(nameof(NotLoggedIn));
+            RemoveRegionHolder();
+
+
+            _RegionManager.RequestNavigate("ContentRegion", nameof(LoginView));
+
+            //_parser.Auth();
+            //NotifyPropertyChanged(nameof(NotLoggedIn));
         }
 
         private void RemoveRegionHolder()

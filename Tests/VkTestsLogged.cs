@@ -14,7 +14,7 @@ namespace Tests
         public void Init()
         {
             _parser = new VkParser();
-            _parser.Auth();
+            _parser.Auth(TestAuthData.Username, TestAuthData.Password);
         }
 
         [TestMethod]

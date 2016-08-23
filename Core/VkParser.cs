@@ -18,7 +18,7 @@ namespace Core
         private VkApi _vk = new VkApi();
 
 
-        public bool Auth(string login = "kravcov_alexey@mail.ru", string password = "Kravc0v_A1exey")
+        public bool Auth(string login , string password)
         {
             _vk = new VkApi();
             var auth = new ApiAuthParams()
@@ -29,10 +29,15 @@ namespace Core
                 Settings = Settings.All
             };
             _vk.Authorize(auth);
-            _vk.RequestsPerSecond = 10000;
+            _vk.RequestsPerSecond = 3;
             return _vk.IsAuthorized;
         }
 
+        public bool Auth(string token)
+        {
+            _vk.Authorize(token);
+            return _vk.IsAuthorized;
+        }
         public bool LoggedIn()
         {
             if (!_vk.IsAuthorized)

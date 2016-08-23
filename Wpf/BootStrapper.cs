@@ -26,6 +26,7 @@ namespace Wpf
             Container.RegisterInstance(new VkParser());
             Container.RegisterInstance<IEventAggregator>(new EventAggregator());
             Container.RegisterTypeForNavigation<GroupsParserView>(nameof(GroupsParserView));
+            Container.RegisterTypeForNavigation<LoginView>(nameof(LoginView));
             Container.RegisterTypeForNavigation<AnalizeGroupUsersPreferenceView>(nameof(AnalizeGroupUsersPreferenceView));
         }
     }

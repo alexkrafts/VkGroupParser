@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestAuthData.cs" />
     <Compile Include="VkTestsLogged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VkTestStatic.cs" />

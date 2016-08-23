@@ -117,8 +117,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BootStrapper.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\AnalizeGroupUsersPreferenceViewModel.cs" />
     <Compile Include="ViewModels\GroupsParserViewModel.cs" />
+    <Compile Include="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\AnalizeGroupUsersPreferenceView.xaml.cs">
       <DependentUpon>AnalizeGroupUsersPreferenceView.xaml</DependentUpon>
@@ -159,6 +163,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AnalizeGroupUsersPreferenceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

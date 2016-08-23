@@ -24,18 +24,19 @@
             LastChildFill="True">
             <StackPanel DockPanel.Dock="Top">
                 <Button
-                    Visibility="{Binding NotLoggedIn, Converter={StaticResource VisibilityConverter}}"
+                    Visibility="{Binding NotLoggedIn,
+                                Converter={StaticResource VisibilityConverter}}"
                     DockPanel.Dock="Top"
                     Command="{Binding LogInCommand}">Log In</Button>
-                <DockPanel>
+                <DockPanel Visibility="{Binding LoggedIn, Converter={StaticResource VisibilityConverter}}">
                     <Button
                         DockPanel.Dock="Right"
                         Command="{Binding SearchCommand}">Search</Button>
                     <TextBox
                         DockPanel.Dock="Left"
                         Text="{Binding SearchQuery,
-                UpdateSourceTrigger=PropertyChanged,
-                Mode=TwoWay}" />
+                                UpdateSourceTrigger=PropertyChanged,
+                                Mode=TwoWay}" />
                 </DockPanel>
                 
             </StackPanel>

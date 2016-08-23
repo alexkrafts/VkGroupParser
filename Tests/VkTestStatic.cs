@@ -18,7 +18,7 @@ namespace Tests
         [TestMethod]
         public void CheckAuth()
         {
-            Assert.IsTrue(_parser.Auth());
+            Assert.IsTrue(_parser.Auth(TestAuthData.Username,TestAuthData.Password));
         }
         //[TestMethod]
         //public void SearchGroups()
