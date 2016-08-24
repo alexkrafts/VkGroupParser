@@ -8,50 +8,59 @@
     xmlns:mvvm="http://prismlibrary.com/"
     mvvm:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance viewModels:AnalizeGroupUsersPreferenceViewModel}"
-    >
-    <StackPanel>
-        
-        <ProgressBar
-            Foreground="Red"
-            Value="{Binding MaleProgressValue}"
-            Maximum="{Binding UserCountLimit}" />
-        <DataGrid
-            ItemsSource="{Binding MaleGroups}"
-            AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn
-                    Header="Count"
-                    Binding="{Binding Value}" />
-                <DataGridTemplateColumn
-                    Header="Группа">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock>
+    d:DataContext="{d:DesignInstance viewModels:AnalizeGroupUsersPreferenceViewModel}">
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Auto"
+        VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+
+            <ProgressBar
+                Foreground="Red"
+                Value="{Binding MaleProgressValue}"
+                Maximum="{Binding UserCountLimit}" />
+            <TextBlock
+                Text="{Binding MaleProgressValue}" />
+            <DataGrid
+                ItemsSource="{Binding MaleGroups}"
+                AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Header="Count"
+                        Binding="{Binding Value}" />
+                    <DataGridTemplateColumn
+                        Header="Группа">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock>
                                 <Hyperlink
-                                    Command="{Binding Path=DataContext.NavigateCommand, 
-                                    RelativeSource={RelativeSource Mode=FindAncestor,      
-                                     AncestorType={x:Type DataGrid}} }"
-                                    CommandParameter="{Binding Key.Result.ScreenName}">
+                                        Command="{Binding Path=DataContext.NavigateCommand, 
+                                        RelativeSource={RelativeSource Mode=FindAncestor,      
+                                        AncestorType={x:Type DataGrid}} }"
+                                        CommandParameter="{Binding Key.Result.ScreenName}">
+                                    <Image
+                                            Source="{Binding Key.Result.Photo100}"
+                                            Height="40"
+                                            Width="40" />
                                     <TextBlock
-                                        Text="{Binding Key.Result.Name}" />
+                                            Text="{Binding Key.Result.Name}" />
                                 </Hyperlink>
                             </TextBlock>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-               
-                <DataGridTextColumn
-                    Header="Подписчиков"
-                    Binding="{Binding Key.Result.MembersCount}" />
-                <DataGridTextColumn
-                    Header="Id"
-                    Binding="{Binding Key.Result.Id}" />
-                <DataGridTextColumn
-                    Header="Статус"
-                    Binding="{Binding Key.Message}" />
-            </DataGrid.Columns>
-        </DataGrid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
-    </StackPanel>
+                    <DataGridTextColumn
+                        Header="Подписчиков"
+                        Binding="{Binding Key.Result.MembersCount}" />
+                    <DataGridTextColumn
+                        Header="Id"
+                        Binding="{Binding Key.Result.Id}" />
+                    <DataGridTextColumn
+                        Header="Статус"
+                        Binding="{Binding Key.Message}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

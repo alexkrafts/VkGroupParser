@@ -9,8 +9,7 @@
     mc:Ignorable="d"
     xmlns:mvvm="http://prismlibrary.com/"
     mvvm:ViewModelLocator.AutoWireViewModel="True"
-    d:DataContext="{d:DesignInstance viewModels:GroupsParserViewModel}"
-   >
+    d:DataContext="{d:DesignInstance viewModels:GroupsParserViewModel}">
 
     <DockPanel
         LastChildFill="True">
@@ -26,10 +25,28 @@
                     IsReadOnly="True"
                     ItemsSource="{Binding Groups}">
                     <DataGrid.Columns>
-                        
-                        <DataGridTextColumn
-                            Header="Название группы"
-                            Binding="{Binding Result.Name}" />
+
+                        <DataGridTemplateColumn
+                            Header="Группа">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                         <Hyperlink
+                                            Command="{Binding Path=DataContext.NavigateCommand, 
+                                                   RelativeSource={RelativeSource Mode=FindAncestor,      
+                                                    AncestorType={x:Type DataGrid}} }"
+                                            CommandParameter="{Binding Result.ScreenName}">
+                                             <Image
+                                                Source="{Binding Result.Photo100}"
+                                                Height="40"
+                                                Width="40" />
+                                             <TextBlock
+                                                Text="{Binding Result.Name}" />
+                                         </Hyperlink>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn
                             Header="Id"
                             Binding="{Binding Result.Id}" />

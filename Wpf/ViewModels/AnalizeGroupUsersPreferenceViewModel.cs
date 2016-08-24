@@ -51,30 +51,29 @@ namespace Wpf.ViewModels
         }
 
 
-        private void Analize()
+        private async void Analize()
         {
             var list = _parser.GetGroupMembers(_targetGroupId.ToString());
             
             //male 
-            var maleTasks = new List<Task>();
             _maleGroupsIdDictionary = new Dictionary<long, int>();
-            var delay = DelayPerRequest;
             if (list.Count() < UserCountLimit)
                 UserCountLimit = list.Count();
+            var lastTask = Task.Delay(DelayPerRequest);
             foreach (var man in list.Where(x => x.Sex == Sex.Male).Take(UserCountLimit).ToList())
             {
-                var mdelay = delay;
-                maleTasks.Add(GetUserGroups(man.Id, mdelay, _maleGroupsIdDictionary));
-                delay += DelayPerRequest;
+                lastTask = lastTask.ContinueWith(t=>GetUserGroups(man.Id, _maleGroupsIdDictionary));
             }
-            Waiter(maleTasks);
+
+            //TODO: start it after all
+            lastTask = lastTask.ContinueWith(task => { ShowGroups(); });
+            //Task.WhenAll(maleTasks).ContinueWith(task => { ShowGroups();});
         }
 
 
-
-        private async Task GetUserGroups(long id, int delay, Dictionary<long, int> groupDict)
+        private async Task GetUserGroups(long id, Dictionary<long, int> groupDict)
         {
-            await Task.Delay(delay);
+            await Task.Delay(DelayPerRequest);
             try
             {
                 CheckGroups(_parser.GetUserGroups(id), groupDict);
@@ -84,10 +83,11 @@ namespace Wpf.ViewModels
                 deletedCount++;
             }
         }
-        private async void Waiter(List<Task> list)
+        private void ShowGroups()
         {
-            await Task.WhenAll(list);
-            _maleGroupsIdDictionary = _maleGroupsIdDictionary.OrderByDescending(x => x.Value).Take(10).ToDictionary(x => x.Key, x => x.Value);
+            _maleGroupsIdDictionary = _maleGroupsIdDictionary
+                .OrderByDescending(x => x.Value).Take(10)
+                .ToDictionary(x => x.Key, x => x.Value);
             var delay = DelayPerRequest;
             MaleGroups = new Dictionary<NotifyTask<Group>, int>();
             foreach (var item in _maleGroupsIdDictionary)
@@ -123,7 +123,7 @@ namespace Wpf.ViewModels
             {
                 foreach (var group in groups)
                 {
-                    if (group.Id == _targetGroupId) continue;
+                    //if (group.Id == _targetGroupId) continue;// show target group
                     if (groupDict.ContainsKey(group.Id))
                         groupDict[group.Id]++;
                     else
@@ -144,7 +144,6 @@ namespace Wpf.ViewModels
         {
             if (long.TryParse(navigationContext.Parameters["id"].ToString(), out _targetGroupId))
                 Analize();
-                //App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(Analize));
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

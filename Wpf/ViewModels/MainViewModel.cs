@@ -24,10 +24,16 @@ namespace Wpf.ViewModels
             _RegionManager = regionManager;
             _parser = parser;
             _eventAggregator = eventAggregator;
-            //LogIn();
             _eventAggregator.GetEvent<AgregateEvent>().Subscribe(Analize, ThreadOption.UIThread);
             _eventAggregator.GetEvent<TokenReceived>().Subscribe(Logged, ThreadOption.UIThread);
+            regionManager.Regions.CollectionChanged += Regions_CollectionChanged;
+            
+        }
 
+        private void Regions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems.Count>0 && NotLoggedIn)
+                LogIn();
         }
 
         private void Logged(string token)
@@ -71,12 +77,7 @@ namespace Wpf.ViewModels
         private void LogIn()
         {
             RemoveRegionHolder();
-
-
             _RegionManager.RequestNavigate("ContentRegion", nameof(LoginView));
-
-            //_parser.Auth();
-            //NotifyPropertyChanged(nameof(NotLoggedIn));
         }
 
         private void RemoveRegionHolder()

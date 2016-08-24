@@ -19,6 +19,14 @@ namespace Wpf.ViewModels
 
         public ICommand AnalizeCommand => new DelegateCommand<object>(Agregate);
 
+        public ICommand NavigateCommand { get; set; }
+
+        private void Navigate(string obj)
+        {
+            System.Diagnostics.Process.Start("http://www.vk.com/" + obj);
+        }
+
+
         private void Agregate(object id)
         {
             _eventAggregator.GetEvent<AgregateEvent>().Publish((long)id);
@@ -32,11 +40,12 @@ namespace Wpf.ViewModels
             _parser = parser;
             _eventAggregator = eventAggregator;
             Groups = new ObservableCollection<NotifyTask<Group>>();
-           
+            NavigateCommand = new DelegateCommand<string>(Navigate);
+
         }
 
 
-        
+
 
         private void Search()
         {

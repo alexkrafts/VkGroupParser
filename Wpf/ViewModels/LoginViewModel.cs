@@ -20,7 +20,7 @@ namespace Wpf.ViewModels
         {
             _parser = parser;
             _aggregator = aggregator;
-            Source = CreateAuthorizeUrlFor(3524567, Settings.All, Display.Popup);
+            Source = CreateAuthorizeUrlFor(3524567, new Settings(), Display.Popup);
         }
         public ICommand NavigatedCommand => new DelegateCommand<Uri>(Navigate);
 
